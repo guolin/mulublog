@@ -78,10 +78,9 @@ ga('send', 'pageview');
 <li>build成功或者失败都可以微信通知我（赞）。</li>
 <li>build成功后自动Push到自己的私有仓库，生成一个新的版本。</li>
 <li>这个daoker可以部署成一个应用，应用的运行环境可以选择自己的主机或者DaoCloud提供的docker环境。1x（128mb）~ 16x，价格和网速还可以比较省心。我的爬虫就用的4x，每个月大约几十块。</li>
-<li>若已经由应用在使用这个docker，则当有新版本的时候可以自动被部署。</li>
+<li>若已经有应用在使用这个docker，则当有新版本的时候可以自动被部署并运行。</li>
 </ol>
-<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><ul>
-<li>我写的有点儿乱，但是用过docker的人应该明白。</li>
+<h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3><ul>
 <li>整个过程很流畅，我写好业务代码，会用babel转化到docker的目录。提交git后就不用管了，都是自动的。</li>
 </ul>
 <h1 id="代码和说明"><a href="#代码和说明" class="headerlink" title="代码和说明"></a>代码和说明</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">|____Dockerfile                  // dockerfile</div><div class="line">|____rsyslog.conf                // syslog的配置文件，用于向日志易发log</div><div class="line">|____start.js                    // docker启动脚本</div><div class="line">|____supervisord.conf            // 就是supervisord配置 </div><div class="line">|____crawl                       // bable后的server目录，直接执行抓去脚本。</div></pre></td></tr></table></figure>
