@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>运行在DaoCloud上小爬虫 | 目录木</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="接上一篇：基于React+leancloud的全栈开发流程
+DaoCloud介绍国内众多提供Docker服务的一员，最开始提供免费的高速镜像，但后来速度越来越不行而且还必须用他们的工具。（单纯加速可以用这个了 https://dev.aliyun.com/）
+功能
+通过git自动build docker， build的时候可以先跑个集成测试。
+build后可以放到私有的仓库。
+不论是公有的dock">
+<meta property="og:type" content="article">
+<meta property="og:title" content="运行在DaoCloud上小爬虫">
+<meta property="og:url" content="http://blog.mulumu.com/2016/09/19/daocloud/index.html">
+<meta property="og:site_name" content="目录木">
+<meta property="og:description" content="接上一篇：基于React+leancloud的全栈开发流程
+DaoCloud介绍国内众多提供Docker服务的一员，最开始提供免费的高速镜像，但后来速度越来越不行而且还必须用他们的工具。（单纯加速可以用这个了 https://dev.aliyun.com/）
+功能
+通过git自动build docker， build的时候可以先跑个集成测试。
+build后可以放到私有的仓库。
+不论是公有的dock">
+<meta property="og:updated_time" content="2016-09-20T08:53:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="运行在DaoCloud上小爬虫">
+<meta name="twitter:description" content="接上一篇：基于React+leancloud的全栈开发流程
+DaoCloud介绍国内众多提供Docker服务的一员，最开始提供免费的高速镜像，但后来速度越来越不行而且还必须用他们的工具。（单纯加速可以用这个了 https://dev.aliyun.com/）
+功能
+通过git自动build docker， build的时候可以先跑个集成测试。
+build后可以放到私有的仓库。
+不论是公有的dock">
+  
+    <link rel="alternative" href="/atom.xml" title="目录木" type="application/atom+xml">
+  
+  <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1470203755_07702.css">
+  
+    <link rel="icon" href="http://7xrnim.com1.z0.glb.clouddn.com/bitbug_favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-78073716-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <section id="main"><article id="post-daocloud" class="article article-type-post" itemscope itemprop="blogPost">
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      运行在DaoCloud上小爬虫
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/09/19/daocloud/" class="article-date">
+  <time datetime="2016-09-19T13:29:20.000Z" itemprop="datePublished">2016-09-19</time>
+</a>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>接上一篇：<a href="http://blog.mulumu.com/2016/09/19/leancloud/">基于React+leancloud的全栈开发流程</a></p>
+<h1 id="DaoCloud介绍"><a href="#DaoCloud介绍" class="headerlink" title="DaoCloud介绍"></a>DaoCloud介绍</h1><p>国内众多提供Docker服务的一员，最开始提供免费的高速镜像，但后来速度越来越不行而且还必须用他们的工具。（单纯加速可以用这个了 <a href="https://dev.aliyun.com/）" target="_blank" rel="external">https://dev.aliyun.com/）</a></p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><ul>
+<li>通过git自动build docker， build的时候可以先跑个集成测试。</li>
+<li>build后可以放到私有的仓库。</li>
+<li>不论是公有的docker还是私有的都可以直接运行在所谓的集群中，其实就是docker的宿主。可以使用daocloud的宿主，也可以用自己的主机。</li>
+<li>stack，data Volume什么的就和tutum差不多，用过tutum或者cloud.docker就会有非常熟悉的感觉。</li>
+</ul>
+<h1 id="我的使用流程"><a href="#我的使用流程" class="headerlink" title="我的使用流程"></a>我的使用流程</h1><ol>
+<li>当然是弄个Dockerfile, 配置一下运行环境，设置端口和启动程序。</li>
+<li>写业务代码，和Docker的其他相关文件放到一个git里面。</li>
+<li>push 到github，DaoCloud会自动根据dockerfile build。</li>
+<li>build成功或者失败都可以微信通知我（赞）。</li>
+<li>build成功后自动Push到自己的私有仓库，生成一个新的版本。</li>
+<li>这个daoker可以部署成一个应用，应用的运行环境可以选择自己的主机或者DaoCloud提供的docker环境。1x（128mb）~ 16x，价格和网速还可以比较省心。我的爬虫就用的4x，每个月大约几十块。</li>
+<li>若已经由应用在使用这个docker，则当有新版本的时候可以自动被部署。</li>
+</ol>
+<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><ul>
+<li>我写的有点儿乱，但是用过docker的人应该明白。</li>
+<li>整个过程很流畅，我写好业务代码，会用babel转化到docker的目录。提交git后就不用管了，都是自动的。</li>
+</ul>
+<h1 id="代码和说明"><a href="#代码和说明" class="headerlink" title="代码和说明"></a>代码和说明</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">|____Dockerfile                  // dockerfile</div><div class="line">|____rsyslog.conf                // syslog的配置文件，用于向日志易发log</div><div class="line">|____start.js                    // docker启动脚本</div><div class="line">|____supervisord.conf            // 就是supervisord配置 </div><div class="line">|____crawl                       // bable后的server目录，直接执行抓去脚本。</div></pre></td></tr></table></figure>
+<p>Dockerfile</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">FROM ubuntu:16.04</div><div class="line">MAINTAINER guolin@mulumu.com</div><div class="line"></div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y supervisor</div><div class="line">RUN mkdir -p /var/log/supervisor</div><div class="line">RUN apt-get install -y nodejs npm</div><div class="line"># 安装基本的库, supervisor, nodejs</div><div class="line"></div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y openssh-server</div><div class="line">RUN mkdir -p /var/run/sshd</div><div class="line"># 其实没啥用，daocloud自己有个shell也很好用。</div><div class="line"></div><div class="line">RUN apt-get install -y rsyslog iputils-ping curl</div><div class="line">RUN curl -O https://www.rizhiyi.com/install/configure_linux_rsyslog.sh </div><div class="line">RUN chmod 755 configure_linux_rsyslog.sh </div><div class="line">RUN ./configure_linux_rsyslog.sh -h log.u.rizhiyi.com -t a3b2a36460a94ed398230ae1c5046d07 --filepath /var/log/syslog --appname mulumu --tag crawl</div><div class="line"># 配置发送日志到日志易</div><div class="line"></div><div class="line">ADD crawl/botbin/package.json /tmp/package.json</div><div class="line">RUN cd /tmp &amp;&amp; npm install</div><div class="line">RUN mkdir -p /root/crawl/botbin &amp;&amp; cp -a /tmp/node_modules /root/crawl/botbin</div><div class="line"># 如果package.json不变的化就能命中build的缓存。</div><div class="line"></div><div class="line">COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf</div><div class="line">COPY start.sh /root/start.sh</div><div class="line">RUN chmod 755 /root/start.sh</div><div class="line">COPY crawl /root/crawl</div><div class="line"># 配置 supervisord</div><div class="line"></div><div class="line">COPY rsyslog.conf /etc/rsyslog.conf</div><div class="line">RUN service rsyslog stop</div><div class="line"># 配置rsyslog, 重启服务</div><div class="line"></div><div class="line">RUN cp /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime</div><div class="line"># 设置时区，主要是为了写日志用</div><div class="line"></div><div class="line">EXPOSE 22 80</div><div class="line"></div><div class="line">CMD [&quot;sh&quot;, &quot;/root/start.sh&quot;]</div><div class="line"># 运行启动脚本</div></pre></td></tr></table></figure>
+<p>具体代码：<br><a href="https://gist.github.com/guolin/c8ba0f7733807ecfbb66fa4ee4fb6a32" target="_blank" rel="external">https://gist.github.com/guolin/c8ba0f7733807ecfbb66fa4ee4fb6a32</a></p>
+<h3 id="稍加注意的几点"><a href="#稍加注意的几点" class="headerlink" title="稍加注意的几点"></a>稍加注意的几点</h3><ul>
+<li>build速度：如果每次build都下载所有的npm还是很慢的，我尝试过安装cnpm也比较慢。最后用缓存的方法解决了，具体方法见代码。</li>
+<li>日志问题：DaoCloud本身有日志的，但仅仅能调试一下看看状态。我把日志通过syslog发送到日志易。通过日志易做监控和分析。</li>
+</ul>
+<h1 id="其他文章"><a href="#其他文章" class="headerlink" title="其他文章"></a>其他文章</h1><ul>
+<li><a href="http://blog.mulumu.com/2016/09/19/stack/">1.一个React+leancloud+daoCloud全栈项目的程序结构</a></li>
+<li><a href="http://blog.mulumu.com/2016/09/19/leancloud/">2.基于React+leancloud的全栈开发流程</a></li>
+<li>3.daoCloud的集成测试+发布流程</li>
+<li>4.nodeJS全栈开发环境</li>
+<li>5.react+redux的项目总结</li>
+<li>6.react服务端渲染（同构）的实现方法</li>
+</ul>
+
+      
+
+      
+        
+    </div>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/09/19/leancloud/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">基于leancloud的全栈开发流程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        <aside id="sidebar">
+  <nav class="menus">
+  	<ul>
+  		<li><a href="/"><i class="icon icon-home"></i></a></li>
+  		
+			<li><a href="/archives"><i class="icon icon-fenlei"></i></a></li>
+  		
+  		
+			<li><a href="/tags"><i class="icon icon-tag"></i></a></li>
+      <li><a href="http://www.mulumu.com">
+        <i class="iconfont icon-mu" style="color: #3aa99e;font-size:21px"></i></a>
+      </li>
+  		
+  		
+  	</ul>
+  </nav>
+  <a id="go-top" href="#"><i class="icon icon-up"></i></a>
+</aside>
+      </div>
+      <footer id="footer">
+  
+	<div id="footer-info" class="inner">
+	  &copy; 2016 木木 
+	  - Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	  - Theme <a href="https://github.com/Alex-fun/hexo-theme-jane/" target="_blank">Jane</a>
+	</div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tag</a>
+  
+    <a href="http://www.mulumu.com/" class="mobile-nav-link">目录木</a>
+  
+</nav>
+    
+
+<script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
